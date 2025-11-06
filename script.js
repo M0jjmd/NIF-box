@@ -1,30 +1,47 @@
 let text = document.getElementById('text');
-let button = document.getElementById('button');
+let p = document.getElementById('errorMsg');
 let finalDni;
 
 text.addEventListener('input', () => {
-    console.log(text.value);
-    if(text.value.length <= 9) {
+    text.value = text.value.toUpperCase();
+
+    if (text.value.length <= 9) {
         finalDni = text.value;
-        if(text.value.length == 9) {
-            console.log('ultimo numero');
-            isNumber(text.value.charAt(text.value.length - 1));
+
+        if (text.value.length <= 8) {
+            if (isNaN(text.value)) {
+                p.innerText = "Els primers 8 caràcters han de ser numèrics";
+                p.style.color = "red";
+                text.value = text.value.slice(0, -1);
+            }
         }
+
+        if (text.value.length == 9) {
+            validarDni(text.value.slice(0, -1));
+        }
+
     } else {
         text.value = finalDni;
     }
 });
 
-const isNumber = (number) => {
-    if(isNaN(number)){
-        console.log('numeroFinal');
-        if(number === letraDni(number)) {
-            console.log(letraDni(number));
-            console.log("La letra es correcta");
+const validarDni = (number) => {
+    if (isNaN(text.value.charAt(text.value.length - 1))) {
+
+        if (text.value.charAt(text.value.length - 1) == letraDni(number)) {
+            p.innerText = "DNI correcte";
+            p.style.color = "green";
+
         } else {
-            console.log('la lletra es incorrecta');
+            p.innerText = "La lletra és incorrecta";
+            p.style.color = "red";
+            text.value = text.value.slice(0, -1);
+
         }
+
     } else {
+        p.innerText = "L'últim caràcter ha de ser una lletra";
+        p.style.color = "red";
         text.value = text.value.slice(0, -1);
     }
 }
